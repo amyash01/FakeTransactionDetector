@@ -42,40 +42,40 @@ class Explain:
         if not is_anomalous:
              return "<strong>Analysis:</strong><br>Transaction appears normal."
 
-        # 1. Determine Probable Fraud Type and Top Factors
-        fraud_type = "Anomaly"
+        # 1. Determine Probable Fake Type and Top Factors
+        fake_type = "Anomaly"
         top_factors = []
         
         # Merge reasons and graph_reasons for processing
         all_reasons_merged = (reasons or []) + (graph_reasons or [])
         r_text = " ".join(all_reasons_merged).lower()
 
-        # PRIORITY 1: Confirmed Structural Fraud (Loops/Cycles)
+        # PRIORITY 1: Confirmed Structural Fake (Loops/Cycles)
         if any("Laundering" in r or "Loop" in r or "Ping-Pong" in r or "Cycle" in r or "Circle" in r for r in all_reasons_merged):
-            fraud_type = "Organized Money Laundering"
+            fake_type = "Organized Money Laundering"
         
         # PRIORITY 2: Deterministic Rule Violations (Definitive Checks)
         elif "copy-paste" in r_text or "duplicate" in r_text:
-            fraud_type = "Transaction Replay Attack"
+            fake_type = "Transaction Replay Attack"
         elif "ghost" in r_text or "negative" in r_text or "zero" in r_text:
-            fraud_type = "Invalid Money Value"
+            fake_type = "Invalid Money Value"
         elif "travel" in r_text or "future" in r_text or "timestamp" in r_text:
-            fraud_type = "Time/Location Logic Error"
+            fake_type = "Time/Location Logic Error"
         
         # PRIORITY 3: Statistical Graph Signals (Stranger Danger)
         elif "stranger" in r_text or any("Community" in r for r in all_reasons_merged):
-            fraud_type = "Suspicious Network Jump"
+            fake_type = "Suspicious Network Jump"
         
         # PRIORITY 4: Behavioral/Velocity Rules
         elif reasons:
             if "teleportation" in r_text or "location" in r_text:
-                fraud_type = "Physical Impossibility"
+                fake_type = "Physical Impossibility"
             elif "burst" in r_text or "velocity" in r_text:
-                fraud_type = "High-Speed Bot Attack"
+                fake_type = "High-Speed Bot Attack"
             elif "incomplete" in r_text or "missing" in r_text:
-                fraud_type = "Broken Identity Data"
+                fake_type = "Broken Identity Data"
             else:
-                fraud_type = "Security Policy Violation"
+                fake_type = "Security Policy Violation"
 
         # PRIORITY 3: ML Explanation (Behavioral - SHAP)
         # Only run this if no hard rules/graphs were found, to explain "The Why" of the ML score
@@ -93,13 +93,13 @@ class Explain:
                 if top_factors:
                     primary_factor = top_factors[0]
                     if 'amount' in primary_factor:
-                        fraud_type = "Statistical Outlier (Amount)"
+                        fake_type = "Statistical Outlier (Amount)"
                     elif 'hour' in primary_factor or 'day' in primary_factor:
-                        fraud_type = "Unusual Time Pattern"
+                        fake_type = "Unusual Time Pattern"
                     elif 'frequency' in primary_factor:
-                        fraud_type = "Behavioral Spike (Velocity)"
+                        fake_type = "Behavioral Spike (Velocity)"
                     elif 'location' in primary_factor:
-                        fraud_type = "Geospatial Anomaly"
+                        fake_type = "Geospatial Anomaly"
             except Exception:
                 pass
         
@@ -155,7 +155,7 @@ class Explain:
             <div style="margin-bottom: 5px;"><strong>Triggered Rule:</strong> <span style="color: #ff3b3b;">{triggered_rules_display}</span></div>
             <div style="margin-bottom: 5px;"><strong>Why Suspicious:</strong> {why_suspicious}</div>
             <div style="margin-bottom: 5px;"><strong>Confidence:</strong> <b>{confidence}%</b></div>
-            <div style="margin-bottom: 5px;"><strong>Probable Type:</strong> <span style="background: rgba(255, 59, 59, 0.1); color: #ff3b3b; padding: 2px 6px; border-radius: 4px; font-weight: 600;">{fraud_type}</span></div>
+            <div style="margin-bottom: 5px;"><strong>Probable Type:</strong> <span style="background: rgba(255, 59, 59, 0.1); color: #ff3b3b; padding: 2px 6px; border-radius: 4px; font-weight: 600;">{fake_type}</span></div>
         </div>
         """
         

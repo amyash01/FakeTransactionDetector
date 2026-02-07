@@ -63,7 +63,7 @@ class HybridScorer:
             optimal_idx = np.argmax(tpr - fpr)  # Maximize TPR - FPR
             self.threshold = thresholds[optimal_idx]
         else:
-            # Unsupervised tuning: Use fixed liberal threshold for Fraud Detection
+            # Unsupervised tuning: Use fixed liberal threshold for Fake Detection
             # Percentile logic hides anomalies if there are many of them (like in a test file).
             # self.threshold = np.percentile(scores, 95)
             self.threshold = 0.55
