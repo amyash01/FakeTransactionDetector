@@ -1,7 +1,7 @@
 # 🛡️ Fake Transaction Detector (FTD)
 
 > **A Next-Gen Hybrid Fake Detection System powered by Rules, Machine Learning, and Graph Analysis.**  
-> *Built for TechFiesta 2026*
+> *Built for Hackathon 2026*
 
 ---
 
